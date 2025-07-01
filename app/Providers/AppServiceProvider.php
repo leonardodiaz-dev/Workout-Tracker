@@ -9,10 +9,13 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register(): void
-    {
-        //
-    }
+    /**
+     * @OA\Info(
+     *     title="API de Rastreador de entrenamiento",
+     *     version="1.0.0"
+     * )
+     */
+    public function register(): void {}
 
     /**
      * Bootstrap any application services.

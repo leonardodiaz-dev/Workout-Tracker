@@ -1,0 +1,519 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Rastreador de entrenamiento",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Registrar nuevo usuario",
+                "operationId": "8a56853624e025573120a09a4c75d468",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "minLength": 10
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "maxLength": 50,
+                                        "minLength": 10
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "minLength": 8
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario registrado con éxito"
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Iniciar sesión y obtener token JWT",
+                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "maxLength": 50,
+                                        "minLength": 10
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "minLength": 8
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Inicio de sesión exitoso, devuelve token JWT"
+                    },
+                    "401": {
+                        "description": "Credenciales inválidas"
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                }
+            }
+        },
+        "/api/me": {
+            "get": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Obtener datos del usuario autenticado",
+                "operationId": "a39fa66a3964c041ce760a10f06a4be5",
+                "responses": {
+                    "200": {
+                        "description": "Datos del usuario autenticado"
+                    },
+                    "401": {
+                        "description": "Token no válido o no enviado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Cerrar sesión (invalidar token JWT)",
+                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
+                "responses": {
+                    "200": {
+                        "description": "Sesión cerrada correctamente"
+                    },
+                    "401": {
+                        "description": "Token inválido o no autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/categorias": {
+            "get": {
+                "tags": [
+                    "Categorias"
+                ],
+                "summary": "Lista categorias",
+                "operationId": "66bfb3e0bf7747700be142ec5329dfae",
+                "responses": {
+                    "200": {
+                        "description": "Respuesta exitosa"
+                    }
+                }
+            }
+        },
+        "/api/ejercicios": {
+            "get": {
+                "tags": [
+                    "Ejercicios"
+                ],
+                "summary": "Lista ejercicios",
+                "operationId": "a4485ab2cada472a3ae91ac100e03302",
+                "responses": {
+                    "200": {
+                        "description": "Respuesta exitosa"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Ejercicios"
+                ],
+                "summary": "Crear ejercicio",
+                "operationId": "624d1a29ac578c6492c810249f64448b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre",
+                                    "descripcion",
+                                    "categoria_id",
+                                    "grupo_muscular_id"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string"
+                                    },
+                                    "descripcion": {
+                                        "type": "string"
+                                    },
+                                    "categoria_id": {
+                                        "type": "integer"
+                                    },
+                                    "grupo_muscular_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Respuesta exitosa"
+                    }
+                }
+            }
+        },
+        "/api/v1/entrenamientos": {
+            "get": {
+                "tags": [
+                    "Entrenamientos"
+                ],
+                "summary": "Listar entrenamientos del usuario autenticado",
+                "operationId": "737b909b3865cbd1e3cc86491c2635db",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrar por estado",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Listado de entrenamientos"
+                    },
+                    "401": {
+                        "description": "No autorizado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Entrenamientos"
+                ],
+                "summary": "Crear un nuevo entrenamiento",
+                "operationId": "f0cdd400da1f7507be7a4970a5b10615",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "titulo",
+                                    "ejercicios"
+                                ],
+                                "properties": {
+                                    "titulo": {
+                                        "type": "string"
+                                    },
+                                    "comentario": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "fecha_programacion": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "nullable": true
+                                    },
+                                    "ejercicios": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "series": {
+                                                    "type": "integer"
+                                                },
+                                                "repeticiones": {
+                                                    "type": "integer"
+                                                },
+                                                "peso": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Entrenamiento creado correctamente"
+                    },
+                    "422": {
+                        "description": "Datos inválidos"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/entrenamientos/{id}": {
+            "get": {
+                "tags": [
+                    "Entrenamientos"
+                ],
+                "summary": "Ver un entrenamiento por ID",
+                "operationId": "40f431f44c12cceab258b303e2f03f5e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del entrenamiento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalles del entrenamiento"
+                    },
+                    "404": {
+                        "description": "Entrenamiento no encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Entrenamientos"
+                ],
+                "summary": "Actualizar un entrenamiento",
+                "operationId": "bda69c4ba16e4510b48e996000b9773f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del entrenamiento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "titulo",
+                                    "ejercicios"
+                                ],
+                                "properties": {
+                                    "titulo": {
+                                        "type": "string"
+                                    },
+                                    "comentario": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "fecha_programacion": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "nullable": true
+                                    },
+                                    "ejercicios": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "series": {
+                                                    "type": "integer"
+                                                },
+                                                "repeticiones": {
+                                                    "type": "integer"
+                                                },
+                                                "peso": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Entrenamiento actualizado"
+                    },
+                    "404": {
+                        "description": "Entrenamiento no encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Entrenamientos"
+                ],
+                "summary": "Eliminar un entrenamiento",
+                "operationId": "f501b71aad62c19c2cfb7bf60f40744b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del entrenamiento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Entrenamiento eliminado con éxito"
+                    },
+                    "404": {
+                        "description": "Entrenamiento no encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/gruposMusculares": {
+            "get": {
+                "tags": [
+                    "Grupos musculares"
+                ],
+                "summary": "Lista grupos musculares",
+                "operationId": "7efd6c59adc8bca3ef5cdfb0a68c8fc3",
+                "responses": {
+                    "200": {
+                        "description": "Respuesta exitosa"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Autenticación",
+            "description": "Autenticación"
+        },
+        {
+            "name": "Categorias",
+            "description": "Categorias"
+        },
+        {
+            "name": "Ejercicios",
+            "description": "Ejercicios"
+        },
+        {
+            "name": "Entrenamientos",
+            "description": "Entrenamientos"
+        },
+        {
+            "name": "Grupos musculares",
+            "description": "Grupos musculares"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "Ingresa el token JWT. Formato: **Bearer {token}**"
+            }
+        }
+    }
+}
