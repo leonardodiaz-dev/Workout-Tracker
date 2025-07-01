@@ -323,7 +323,7 @@ return [
          * Constants which can be used in annotations
          */
         'constants' => [
-            'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://rastreadorentrenamiento.test'),
+            'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'https://workout-tracker-production-2cd2.up.railway.app/'),
         ],
     ],
 ];
